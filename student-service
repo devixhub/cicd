@@ -9,5 +9,10 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/devixhub/student-service.git'
             }
         }
+         stage('maven-package') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
     }
 }
