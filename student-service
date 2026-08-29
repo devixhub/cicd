@@ -4,7 +4,7 @@ pipeline {
     }
 
     stages {
-        stage('Hello') {
+        stage('git-cheakout') {
             steps {
                 echo 'Hello World'
             }
