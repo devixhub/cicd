@@ -4,24 +4,35 @@ pipeline {
     }
 
     stages {
-        stage('git-cheakout') {
+
+        stage('git-checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/devixhub/student-service.git'
+                git branch: 'main',
+                    url: 'https://github.com/devixhub/student-service.git'
             }
         }
-         stage('maven-package') {
+
+        stage('maven-package') {
             steps {
                 sh 'mvn clean package'
             }
         }
- stage('sonar-scan') {
+
+        stage('sonar-scan') {
             steps {
-              sh "mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-                 -Dsonar.projectKey=student-service \
-                 -Dsonar.projectName='student-service' \
-                 -Dsonar.host.url=http://13.233.132.232:9000 \
-                 -Dsonar.token=sqp_4094449f9c5256aaae64482c67d0d6fd2f1b99f2"
-  
+                sh """
+                    mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                    -Dsonar.projectKey=student-service \
+                    -Dsonar.projectName=student-service \
+                    -Dsonar.host.url=http://13.233.132.232:9000 \
+                    -Dsonar.token=sqp_4094449f9c5256aaae64482c67d0d6fd2f1b99f2
+                """
+            }
+        }
+
+        stage('upload-to-nexus') {
+            steps {
+                sh 'mvn deploy'
             }
         }
     }
