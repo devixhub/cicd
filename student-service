@@ -18,15 +18,11 @@ pipeline {
             }
         }
 
-        stage('sonar-scan') {
+        stage('SonarQube Analysis') {
             steps {
-                sh """
-                    mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-                    -Dsonar.projectKey=student-service \
-                    -Dsonar.projectName=student-service \
-                    -Dsonar.host.url=http://13.233.230.123:9000 \
-                    -Dsonar.token=sqp_4094449f9c5256aaae64482c67d0d6fd2f1b99f2
-                """
+                withSonarQubeEnv('SonarServer') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=student-service'
+                }
             }
         }
 
